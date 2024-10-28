@@ -1,10 +1,4 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    die("Accès refusé. Vous devez être connecté en tant qu'administrateur.");
-}
-
 // Connexion à la base de données
 $servername = "localhost";
 $username = "root";
@@ -13,35 +7,41 @@ $dbname = "mon_project";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérification de la connexion
+// Vérifier la connexion
 if ($conn->connect_error) {
-    die("La connexion a échoué: " . $conn->connect_error);
+    die("La connexion a échoué : " . $conn->connect_error);
 }
-
-$id = $_GET['id'];
 
 // Suppression de l'actualité
-$sql = "DELETE FROM actualites WHERE id = $id";
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    
+    // Récupérer le chemin de l'image
+    $sql = "SELECT image FROM actualites WHERE id = $id";
+    $result = $conn->query($sql);
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $imagePath = $row['image'];
 
-if ($conn->query($sql) === TRUE) {
-    echo "L'actualité a été supprimée avec succès.";
-    header("Location: actualite.php"); // Rediriger vers la page des actualités
-    exit();
-} else {
-    echo "Erreur: " . $conn->error;
-}
-
-// Suppression de l'image
-if (file_exists($image_path)) {
-    if (unlink($image_path)) {
-        echo "L'image a été supprimée avec succès.";
+        // Supprimer l'actualité de la base de données
+        $sql = "DELETE FROM actualites WHERE id = $id";
+        if ($conn->query($sql) === TRUE) {
+            // Supprimer le fichier image
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+            echo "L'actualité a été supprimée avec succès.";
+        } else {
+            echo "Erreur lors de la suppression de l'actualité : " . $conn->error;
+        }
     } else {
-        echo "Erreur lors de la suppression de l'image.";
+        echo "Aucune actualité trouvée avec cet ID.";
     }
-} else {
-    echo "L'image n'existe pas dans le dossier.";
 }
 
-// Fermeture de la connexion
 $conn->close();
+
+header("Location: admin_dashboard.php");
+exit();
 ?>

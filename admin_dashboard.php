@@ -376,21 +376,32 @@ if ($result === FALSE) {
             <button id="addPublicationBtn" class="btn"><i class="fas fa-plus"></i> Ajouter une publication</button>
             <ul id="publicationList" class="publication-list"> 
             <?php
-                if ($result && $result->num_rows > 0) {
-                    // Afficher chaque publication
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<li>';
-                        echo '<h3>' . htmlspecialchars($row['titre']) . '</h3>';
-                        echo '<p>' . htmlspecialchars($row['contenu']) . '</p>';
-                        echo '<img src="' . htmlspecialchars($row['image']) . '" alt="Image de la publication" />';
-                        echo '</li>';
-                    }
-                } else {
-                    echo '<li>Aucune publication trouvée.</li>';
-                }
-                
-   
-?>
+    $sql = "SELECT * FROM actualites";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<li>";
+            
+           
+echo "<h3>" . htmlspecialchars($row['titre']) . "</h3>";
+            echo "<p>" . htmlspecialchars($row['categorie']) . "</p>";
+            echo "<p><img src='" . htmlspecialchars($row['contenu']) . "' alt='Image de l'actualité'></p>";
+
+            // Boutons Modifier et Supprimer
+            
+    
+echo "<button class='editBtn' data-id='" . $row['id'] . "'>Modifier</button>";
+            
+        
+echo "<button class='deleteBtn' data-id='" . $row['id'] . "'>Supprimer</button>";
+
+            echo "</li>";
+        }
+    } else {
+        echo "<p>Aucune publication trouvée.</p>";
+    }
+    ?>
             </ul>
         </section>
     </div>
@@ -456,6 +467,25 @@ document.getElementById('imageUpload').onchange = function(event) {
     imagePreview.src = URL.createObjectURL(event.target.files[0]);
     imagePreview.style.display = "block";
 };
+
+// Gérer la suppression
+document.querySelectorAll('.deleteBtn').forEach(button => {
+    button.addEventListener('click', function() {
+        const publicationId = this.getAttribute('data-id');
+        if (confirm("Voulez-vous vraiment supprimer cette actualité ?")) {
+            window.location.href = "delete_publication.php?id=" + publicationId;
+        }
+    });
+});
+
+// Gérer la modification
+document.querySelectorAll('.editBtn').forEach(button => {
+    button.addEventListener('click', function() {
+        const publicationId = this.getAttribute('data-id');
+        window.location.href = "edit_publication.php?id=" + publicationId;
+    });
+});
+
 </script>
 
 </body>
