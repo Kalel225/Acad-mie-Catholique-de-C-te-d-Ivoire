@@ -727,63 +727,12 @@ $isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] =
         <div class="container">
           <h2>Actualités et Événements</h2>
           <div class="news-grid">
-          <?php
-            // Requête pour récupérer les actualités
-            $sql = "SELECT id, titre, contenu, image FROM actualites ORDER BY date_publication DESC";
-            $result = $conn->query($sql);
-
-            // Vérification s'il y a des résultats
-            if ($result->num_rows > 0) {
-                // Affichage de chaque actualité
-                while ($row = $result->fetch_assoc()) {
-                    echo '<div class="news-card">';
-                    echo '<img src="' . htmlspecialchars($row["image"]) . '" alt="' . htmlspecialchars($row["titre"]) . '" width="300" height="200">';
-                    echo '<div class="news-card-content">';
-                    echo '<h3>' . htmlspecialchars($row["titre"]) . '</h3>';
-                    echo '<p>' . htmlspecialchars($row["contenu"]) . '</p>';
-
-                    // Afficher les boutons Modifier et Supprimer si l'utilisateur est un admin
-                    if ($isAdmin) {
-                        echo '<a href="edit_publication.php?id=' . $row["id"] . '">Modifier</a>';
-                        echo ' | ';
-                        
-        
-echo '<a href="delete_publication.php?id=' . $row["id"] . '" onclick="return confirm(\'Voulez-vous vraiment supprimer cette actualité ?\');">Supprimer</a>';
-                    }
-
-                    echo '</div>';
-                    echo '</div>';
-                }
-            } else {
-              //  echo "Aucune actualité disponible pour le moment.";
-            }
-            ?>
+         
           </div>
         </div>
       </section>
-      <?php if ($isAdmin): ?>
     <!-- Si l'administrateur est connecté, afficher le formulaire d'ajout d'actualités -->
-    <section id="ajout-actualite">
-        <div class="container">
-            <h2>Ajouter une Actualité</h2>
-            <form action="add_publication.php" method="POST" enctype="multipart/form-data">
-                <label for="titre">Titre de l'actualité :</label>
-                <input type="text" id="titre" name="titre" required>
-
-                <label for="contenu">Contenu de l'actualité :</label>
-                <textarea id="contenu" name="contenu" required></textarea>
-
-                <label for="image">Télécharger une image :</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
-
-                <button type="submit">Ajouter l'actualité</button>
-            </form>
-        </div>
-    </section>
-  
-<?php endif; ?>
     </main>
-
     <footer>
       <div class="container">
         <p>
