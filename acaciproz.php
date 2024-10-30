@@ -954,42 +954,6 @@
       </section>
 
       <section id="actualites">
-      <?php
-    // Connexion à la base de données
-    $servername = "localhost"; // Remplacez par votre serveur
-    $username = "root"; // Remplacez par votre nom d'utilisateur
-    $password = ""; // Remplacez par votre mot de passe
-    $dbname = "mon_project"; // Remplacez par votre nom de base de données
-
-    // Créer la connexion
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Vérifier la connexion
-    if ($conn->connect_error) {
-        die("Échec de la connexion : " . $conn->connect_error);
-    }
-
-    // Récupérer les 5 dernières actualités
-    $sql = "SELECT * FROM actualites ORDER BY date_publication DESC LIMIT 5";
-    $result = $conn->query($sql);
-
-    // Vérifier si des résultats sont retournés
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo '<div class="news-item">';
-            echo '<h2>' . htmlspecialchars($row['titre']) . '</h2>';
-            echo '<img src="' . htmlspecialchars($row["image"]) . '" alt="' . htmlspecialchars($row["titre"]) . '" width="300" height="200">';
-            echo '<p>' . htmlspecialchars($row['contenu']) . '</p>';
-            echo '<a href="actualite.php?id=' . $row['id'] . '">Lire plus</a>';
-            echo '</div>';
-        }
-    } else {
-        echo '<p class="NoneActu" >Aucune actualité disponible.</p>';
-    }
-
-    // Fermer la connexion
-    $conn->close();
-    ?>
     <a class="moreActualite" href="actualite.php" class="btn">Voir plus d'actualités</a>
       </section>
     </main>

@@ -115,243 +115,102 @@ if ($result === FALSE) {
       href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.snow.css"
     />
     <style>
-      :root {
-        --primary-color: #8b0000;
-        --secondary-color: #ffd700;
-        --text-color: #333333;
-        --background-light: #fff8dc;
-        --white: #ffffff;
-        --gray: #f4f4f4;
-        --transition: all 0.3s ease-in-out;
-      }
+      /* Styles globaux */
+:root {
+    --primary-color: #8b0000;
+    --secondary-color: #ffd700;
+    --text-color: #333333;
+    --background-light: #fff8dc;
+    --white: #ffffff;
+    --gray: #f4f4f4;
+    --transition: all 0.3s ease-in-out;
+}
 
-      body {
-        font-family: "Roboto", Arial, sans-serif;
-        background-color: var(--background-light);
-        margin: 0;
-        padding: 0;
-        color: var(--text-color);
-      }
+body {
+    font-family: "Roboto", Arial, sans-serif;
+    background-color: var(--background-light);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
 
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-      header {
-        background-color: var(--primary-color);
-        color: var(--white);
-        padding: 20px 0;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
+/* Section du formulaire d'édition */
+.dashboard-section {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-      h1,
-      h2,
-      h3 {
-        margin: 0;
-      }
+.form-group {
+    margin-bottom: 20px;
+}
 
-      nav {
-        background-color: var(--secondary-color);
-        padding: 10px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
 
-      nav ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-      }
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
 
-      nav ul li {
-        margin: 0 15px;
-      }
+.form-group textarea {
+    height: 150px;
+    resize: vertical;
+}
 
-      nav ul li a {
-        color: var(--text-color);
-        text-decoration: none;
-        font-weight: bold;
-        transition: var(--transition);
-        padding: 5px 10px;
-        border-radius: 5px;
-      }
+/* Styles des boutons */
+.btn-group {
+    margin-top: 10px;
+}
 
-      nav ul li a:hover {
-        background-color: var(--primary-color);
-        color: var(--white);
-      }
+.btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px;
+}
 
-      .dashboard-section {
-        background-color: var(--white);
-        border-radius: 8px;
-        padding: 30px;
-        margin-top: 30px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
+.btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
 
-      .publication-list {
-        list-style-type: none;
-        padding: 0;
-      }
+.btn-edit {
+    background-color: #007bff; /* Couleur pour le bouton "Annuler" */
+}
 
-      .publication-item {
-        background-color: var(--gray);
-        margin-bottom: 20px;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      }
+/* Styles du footer */
+footer {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 20px 0;
+    text-align: center;
+}
 
-      .publication-image {
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
-        margin-top: 10px;
-      }
-
-      .btn-group {
-        margin-top: 10px;
-      }
-
-      .btn {
-        background-color: var(--primary-color);
-        color: var(--white);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: var(--transition);
-        font-size: 14px;
-        font-weight: bold;
-        margin-right: 10px;
-      }
-
-      .btn:hover {
-        background-color: var(--secondary-color);
-        color: var(--text-color);
-      }
-
-      .btn-delete {
-        background-color: #dc3545;
-      }
-
-      .btn-edit {
-        background-color: #007bff;
-      }
-
-      #addPublicationBtn {
-        display: block;
-        margin: 20px auto;
-        font-size: 18px;
-        padding: 15px 30px;
-      }
-
-      #publicationModal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-
-      .modal-content {
-        background-color: var(--white);
-        margin: 5% auto;
-        padding: 20px;
-        border-radius: 8px;
-        width: 90%;
-        max-width: 800px;
-        height: 80vh;
-        overflow-y: auto;
-      }
-
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-      }
-
-      .form-group {
-        margin-bottom: 20px;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-      }
-
-      .form-group input[type="text"],
-      .form-group textarea,
-      .form-group select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 16px;
-      }
-
-      .form-group textarea {
-        height: 150px;
-        resize: vertical;
-      }
-
-      #editor {
-        height: 300px;
-      }
-
-      .image-preview {
-        max-width: 200px;
-        max-height: 200px;
-        margin-top: 10px;
-      }
-
-      .tag-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-      }
-
-      .tag {
-        background-color: var(--secondary-color);
-        color: var(--text-color);
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 14px;
-      }
-
-      .tag .remove-tag {
-        margin-left: 5px;
-        cursor: pointer;
-      }
-
-      #tagInput {
-        width: calc(100% - 100px);
-      }
-
-      #addTagBtn {
-        width: 90px;
-        margin-left: 10px;
-      }
+      
     </style>
 </head>
 
@@ -376,32 +235,25 @@ if ($result === FALSE) {
             <button id="addPublicationBtn" class="btn"><i class="fas fa-plus"></i> Ajouter une publication</button>
             <ul id="publicationList" class="publication-list"> 
             <?php
-    $sql = "SELECT * FROM actualites";
-    $result = $conn->query($sql);
+            $sql = "SELECT * FROM actualites";
+            $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<li>";
-            
-           
-echo "<h3>" . htmlspecialchars($row['titre']) . "</h3>";
-            echo "<p>" . htmlspecialchars($row['categorie']) . "</p>";
-            echo "<p><img src='" . htmlspecialchars($row['contenu']) . "' alt='Image de l'actualité'></p>";
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<li>";
+                    echo "<h3>" . htmlspecialchars($row['titre']) . "</h3>";
+                    echo "<p>" . htmlspecialchars($row['categorie']) . "</p>";
+                    echo "<p><img src='" . htmlspecialchars($row['image']) . "' alt='Image de l'actualité' style='max-width: 100%; height: auto;'></p>";
 
-            // Boutons Modifier et Supprimer
-            
-    
-echo "<button class='editBtn' data-id='" . $row['id'] . "'>Modifier</button>";
-            
-        
-echo "<button class='deleteBtn' data-id='" . $row['id'] . "'>Supprimer</button>";
-
-            echo "</li>";
-        }
-    } else {
-        echo "<p>Aucune publication trouvée.</p>";
-    }
-    ?>
+                    // Boutons Modifier et Supprimer
+                    echo "<button class='editBtn' data-id='" . $row['id'] . "'>Modifier</button>";
+                    echo "<button class='deleteBtn' data-id='" . $row['id'] . "'>Supprimer</button>";
+                    echo "</li>";
+                }
+            } else {
+                echo "<p>Aucune publication trouvée.</p>";
+            }
+            ?>
             </ul>
         </section>
     </div>
@@ -426,7 +278,7 @@ echo "<button class='deleteBtn' data-id='" . $row['id'] . "'>Supprimer</button>"
                 </div>
                 <div class="form-group">
                     <label for="editor">Contenu</label>
-                    <div id="editor"></div>
+                    <textarea name="contenu" id="editor" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="imageUpload">Image de couverture</label>
@@ -439,54 +291,52 @@ echo "<button class='deleteBtn' data-id='" . $row['id'] . "'>Supprimer</button>"
     </div>
 
     <script>
-// JavaScript pour gérer l'affichage du modal et la prévisualisation de l'image
-const addPublicationBtn = document.getElementById('addPublicationBtn');
-const modal = document.getElementById('publicationModal');
-const closeModal = document.getElementsByClassName('close')[0];
+    // JavaScript pour gérer l'affichage du modal et la prévisualisation de l'image
+    const addPublicationBtn = document.getElementById('addPublicationBtn');
+    const modal = document.getElementById('publicationModal');
+    const closeModal = document.getElementsByClassName('close')[0];
 
-// Afficher le pop-up quand on clique sur le bouton Ajouter une publication
-addPublicationBtn.onclick = function() {
-    modal.style.display = "block";
-}
+    // Afficher le pop-up quand on clique sur le bouton Ajouter une publication
+    addPublicationBtn.onclick = function() {
+        modal.style.display = "block";
+    }
 
-// Cacher le pop-up quand on clique sur le bouton de fermeture
-closeModal.onclick = function() {
-    modal.style.display = "none";
-}
-
-// Fermer le pop-up si on clique à l'extérieur de celui-ci
-window.onclick = function(event) {
-    if (event.target == modal) {
+    // Cacher le pop-up quand on clique sur le bouton de fermeture
+    closeModal.onclick = function() {
         modal.style.display = "none";
     }
-}
 
-// Prévisualisation de l'image
-document.getElementById('imageUpload').onchange = function(event) {
-    const imagePreview = document.getElementById('imagePreview');
-    imagePreview.src = URL.createObjectURL(event.target.files[0]);
-    imagePreview.style.display = "block";
-};
-
-// Gérer la suppression
-document.querySelectorAll('.deleteBtn').forEach(button => {
-    button.addEventListener('click', function() {
-        const publicationId = this.getAttribute('data-id');
-        if (confirm("Voulez-vous vraiment supprimer cette actualité ?")) {
-            window.location.href = "delete_publication.php?id=" + publicationId;
+    // Fermer le pop-up si on clique à l'extérieur de celui-ci
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
         }
+    }
+
+    // Prévisualisation de l'image
+    document.getElementById('imageUpload').onchange = function(event) {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.src = URL.createObjectURL(event.target.files[0]);
+        imagePreview.style.display = "block";
+    };
+
+    // Gérer la suppression
+    document.querySelectorAll('.deleteBtn').forEach(button => {
+        button.addEventListener('click', function() {
+            const publicationId = this.getAttribute('data-id');
+            if (confirm("Voulez-vous vraiment supprimer cette actualité ?")) {
+                window.location.href = "delete_publication.php?id=" + publicationId;
+            }
+        });
     });
-});
 
-// Gérer la modification
-document.querySelectorAll('.editBtn').forEach(button => {
-    button.addEventListener('click', function() {
-        const publicationId = this.getAttribute('data-id');
-        window.location.href = "edit_publication.php?id=" + publicationId;
+    // Gérer la modification
+    document.querySelectorAll('.editBtn').forEach(button => {
+        button.addEventListener('click', function() {
+            const publicationId = this.getAttribute('data-id');
+            window.location.href = "edit_publication.php?id=" + publicationId;
+        });
     });
-});
-
-</script>
-
+    </script>
 </body>
 </html>

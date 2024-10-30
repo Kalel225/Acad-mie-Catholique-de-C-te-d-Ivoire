@@ -19,11 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_FILES["image"]["name"])) {
         // Dossier de destination pour les images
         $target_dir = "uploads/"; // Assurez-vous que ce dossier existe
-
-        // Chemin complet du fichier téléchargé
         $target_file = $target_dir . basename($_FILES["image"]["name"]);
-
-        // Obtenir l'extension du fichier
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
         // Vérifier si le fichier est une image réelle
@@ -52,14 +48,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
 
-        // Essayer de déplacer le fichier dans le dossier de destination
+        // Déplacer le fichier dans le dossier de destination
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             echo "Le fichier " . htmlspecialchars(basename($_FILES["image"]["name"])) . " a été téléchargé avec succès.";
 
             // Insérer les détails de l'actualité dans la base de données
             $titre = $conn->real_escape_string($_POST['titre']);
-            $contenu = $conn->real_escape_string($target_file); // Utiliser l'image comme contenu
-            $categorie = $conn->real_escape_string($_POST['category']); // Récupérer la catégorie
+            $contenu = $conn->real_escape_string($_POST['contenu']); // Utiliser le champ de contenu texte
+            $categorie = $conn->real_escape_string($_POST['category']);
 
             $sql = "INSERT INTO actualites (titre, contenu, image, categorie) VALUES ('$titre', '$contenu', '$target_file', '$categorie')";
             

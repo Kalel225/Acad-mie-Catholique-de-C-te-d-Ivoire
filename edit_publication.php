@@ -1,56 +1,57 @@
 <?php
 session_start();
+include('db_connect.php');
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    die("Accès refusé. Vous devez être connecté en tant qu'administrateur.");
+// Vérifiez si la connexion à la base de données a réussi
+if (!$conn) {
+    die("Échec de la connexion : " . mysqli_connect_error());
 }
 
-// Connexion à la base de données
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mon_project";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérification de la connexion
-if ($conn->connect_error) {
-    die("La connexion a échoué: " . $conn->connect_error);
+// Vérifiez si l'administrateur est connecté
+if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
+    header('Location: login.php');
+    exit();
 }
 
-$id = $_GET['id'];
+// Assurez-vous d'avoir l'ID de la publication à modifier
+if (isset($_GET['id'])) {
+    
+   
+$publication_id = $_GET['id'];
 
-// Récupérer les détails de l'actualité à modifier
-$sql = "SELECT * FROM actualites WHERE id = $id";
-$result = $conn->query($sql);
+    // Récupérer la publication depuis la base de données
+    $query = "SELECT * FROM actualites WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $publication_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $publication = $result->fetch_assoc();
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
+    // Vérifiez si la publication existe
+    if (!$publication) {
+        echo "Publication non trouvée.";
+        exit();
+    }
 } else {
-    die("Aucune actualité trouvée avec cet ID.");
+    echo "ID de publication manquant.";
+    exit();
 }
 
-// Traitement du formulaire de modification
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Gestion de la soumission du formulaire
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titre = $_POST['titre'];
     $contenu = $_POST['contenu'];
-    $image = $_FILES['image']['name'];
-    $target = "uploads/" . basename($image);
+    
+    // Mettre à jour la publication dans la base de données
+    $update_query = "UPDATE actualites SET titre = ?, contenu = ? WHERE id = ?";
+    $update_stmt = $conn->prepare($update_query);
+    $update_stmt->bind_param("ssi", $titre, $contenu, $publication_id);
 
-    // Mise à jour des données dans la base
-    if ($image) {
-        $sql = "UPDATE actualites SET titre='$titre', contenu='$contenu', image='$image' WHERE id=$id";
-        move_uploaded_file($_FILES['image']['tmp_name'], $target);
-    } else {
-        $sql = "UPDATE actualites SET titre='$titre', contenu='$contenu' WHERE id=$id";
-    }
-
-    if ($conn->query($sql) === TRUE) {
-        echo "L'actualité a été mise à jour avec succès.";
-        header("Location: actualite.php"); // Rediriger vers la page des actualités
+    if ($update_stmt->execute()) {
+        header('Location: admin_dashboard.php'); // Rediriger vers le tableau de bord après la mise à jour
         exit();
     } else {
-        echo "Erreur: " . $conn->error;
+        echo "Erreur lors de la mise à jour de la publication.";
     }
 }
 ?>
@@ -62,9 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Actu - ACACI</title>
     <link rel="icon" href="assets/images/newpng.png" type="image/png" />
-</head>
-<body>
-
+    
 <div class="modal-content">
     <h2>Modifier l'actualité</h2>
     <form action=

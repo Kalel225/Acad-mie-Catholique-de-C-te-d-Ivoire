@@ -1,21 +1,23 @@
 <?php
-session_start(); // Démarrage de la session pour gérer l'authentification
-
 // Connexion à la base de données
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "mon_project";
 
+// Créer la connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérification de la connexion
+// Vérifier la connexion
 if ($conn->connect_error) {
-    die("La connexion a échoué: " . $conn->connect_error);
+    
+  
+die("Échec de la connexion : " . $conn->connect_error);
 }
 
-// Vérifier si l'utilisateur est connecté
-$isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+// Récupérer les actualités depuis la base de données
+$sql = "SELECT titre, contenu, image, categorie FROM actualites ORDER BY id DESC";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -727,7 +729,25 @@ $isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] =
         <div class="container">
           <h2>Actualités et Événements</h2>
           <div class="news-grid">
-         
+          <?php
+                if ($result->num_rows > 0) {
+                    // Afficher chaque actualité
+                    while($row = $result->fetch_assoc()) {
+                        echo '<div class="news-item">';
+                        echo '<img src="' . htmlspecialchars($row["image"]) . '" alt="Image de l\'actualité">';
+                        echo '<h3>' . htmlspecialchars($row["titre"]) . '</h3>';
+                        
+                        
+echo '<p>' . htmlspecialchars($row["contenu"]) . '</p>';
+                        echo '<p><strong>Catégorie :</strong> ' . htmlspecialchars($row["categorie"]) . '</p>';
+                        echo '</div>';
+                    }
+                } else {
+                    
+       
+echo "<p>Aucune actualité disponible pour le moment.</p>";
+                }
+                ?>
           </div>
         </div>
       </section>
