@@ -1,3 +1,12 @@
+<?php
+// Inclure la connexion à la base de données
+include('db_connect.php');
+
+// Requête pour récupérer les quatre actualités les plus récentes avec titre, contenu, image et catégorie
+$query = "SELECT id, titre, contenu, image, categorie, date_publication FROM actualites ORDER BY date_publication DESC LIMIT 4";
+$result = $conn->query($query);
+?>
+
 <html>
   <head>
     <base href="acaciproz.html" />
@@ -953,9 +962,33 @@
         </div>
       </section>
 
-      <section id="actualites">
-    <a class="moreActualite" href="actualite.php" class="btn">Voir plus d'actualités</a>
-      </section>
+
+<section
+id="actualites">
+    <div class="container">
+        <h2>Dernières Actualités</h2>
+        <div class="news-grid">
+            <?php while ($row = $result->fetch_assoc()) : ?>
+                <div class="news-item">
+                    <div class="news-image">
+                        <img src="uploads/<?php echo htmlspecialchars($row['image']); ?>" alt="Image de <?php echo htmlspecialchars($row['titre']); ?>">
+                    </div>
+                    <div class="news-content">
+                        <h3><?php echo htmlspecialchars($row['titre']); ?></h3>
+                        <p class="category"><?php echo htmlspecialchars($row['categorie']); ?></p>
+                        <p><?php echo substr(htmlspecialchars($row['contenu']), 0, 100); ?>...</p>
+                        <a href="actualite.php?id=<?php echo $row['id']; ?>" class="see-more-link">Voir plus</a>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    </div>
+</section>
+
+<?php
+// Fermer la connexion
+$conn->close();
+?>
     </main>
 
     <footer>
@@ -1356,5 +1389,9 @@
       newsletterFormStyleElement.textContent = newsletterFormStyles;
       document.head.appendChild(newsletterFormStyleElement);
     </script>
+    <?php
+// Fermer la connexion
+$conn->close();
+?>
   </body>
 </html>

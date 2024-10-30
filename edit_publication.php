@@ -2,60 +2,53 @@
 session_start();
 include('db_connect.php');
 
-// Vérifiez si la connexion à la base de données a réussi
-if (!$conn) {
-    die("Échec de la connexion : " . mysqli_connect_error());
-}
-
-// Vérifiez si l'administrateur est connecté
-if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
+// Vérifiez que l'utilisateur est bien connecté, sinon redirection vers login.php
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header('Location: login.php');
     exit();
 }
 
-// Assurez-vous d'avoir l'ID de la publication à modifier
-if (isset($_GET['id'])) {
-    
-   
-$publication_id = $_GET['id'];
-
-    // Récupérer la publication depuis la base de données
-    $query = "SELECT * FROM actualites WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $publication_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $publication = $result->fetch_assoc();
-
-    // Vérifiez si la publication existe
-    if (!$publication) {
-        echo "Publication non trouvée.";
-        exit();
-    }
-} else {
-    echo "ID de publication manquant.";
+// Vérifiez que l'ID de la publication est passé en GET, sinon affichez un message
+if (!isset($_GET['id']) && !isset($_POST['id'])) {
+    echo "Publication non trouvée.";
     exit();
 }
 
-// Gestion de la soumission du formulaire
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $titre = $_POST['titre'];
-    $contenu = $_POST['contenu'];
-    
-    // Mettre à jour la publication dans la base de données
-    $update_query = "UPDATE actualites SET titre = ?, contenu = ? WHERE id = ?";
-    $update_stmt = $conn->prepare($update_query);
-    $update_stmt->bind_param("ssi", $titre, $contenu, $publication_id);
+// Récupération de l'ID de publication
+$id = isset($_GET['id']) ? $_GET['id'] : $_POST['id'];
 
-    if ($update_stmt->execute()) {
-        header('Location: admin_dashboard.php'); // Rediriger vers le tableau de bord après la mise à jour
+// Si le formulaire a été soumis, mettez à jour les données
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+
+    // Mise à jour de la publication
+    $query = "UPDATE actualites SET title = ?, content = ? WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssi", $title, $content, $id);
+    if ($stmt->execute()) {
+        header('Location: admin_dashboard.php');
         exit();
     } else {
         echo "Erreur lors de la mise à jour de la publication.";
     }
-}
-?>
+} else {
+    // Si le formulaire n'a pas été soumis, récupérez les données actuelles pour afficher dans le formulaire
+    $query = "SELECT * FROM actualites WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $publication = $result->fetch_assoc();
 
+    if (!$publication) {
+        echo "Publication non trouvée.";
+        exit();
+    }
+}
+
+    
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

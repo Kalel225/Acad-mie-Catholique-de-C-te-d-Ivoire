@@ -115,102 +115,243 @@ if ($result === FALSE) {
       href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.snow.css"
     />
     <style>
-      /* Styles globaux */
-:root {
-    --primary-color: #8b0000;
-    --secondary-color: #ffd700;
-    --text-color: #333333;
-    --background-light: #fff8dc;
-    --white: #ffffff;
-    --gray: #f4f4f4;
-    --transition: all 0.3s ease-in-out;
-}
+      :root {
+        --primary-color: #8b0000;
+        --secondary-color: #ffd700;
+        --text-color: #333333;
+        --background-light: #fff8dc;
+        --white: #ffffff;
+        --gray: #f4f4f4;
+        --transition: all 0.3s ease-in-out;
+      }
 
-body {
-    font-family: "Roboto", Arial, sans-serif;
-    background-color: var(--background-light);
-    margin: 0;
-    padding: 0;
-    color: var(--text-color);
-}
+      body {
+        font-family: "Roboto", Arial, sans-serif;
+        background-color: var(--background-light);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+      }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
 
-/* Section du formulaire d'édition */
-.dashboard-section {
-    background-color: var(--white);
-    border-radius: 8px;
-    padding: 30px;
-    margin-top: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+      header {
+        background-color: var(--primary-color);
+        color: var(--white);
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-.form-group {
-    margin-bottom: 20px;
-}
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+      }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
+      nav {
+        background-color: var(--secondary-color);
+        padding: 10px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-.form-group input[type="text"],
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+      }
 
-.form-group textarea {
-    height: 150px;
-    resize: vertical;
-}
+      nav ul li {
+        margin: 0 15px;
+      }
 
-/* Styles des boutons */
-.btn-group {
-    margin-top: 10px;
-}
+      nav ul li a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: bold;
+        transition: var(--transition);
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
 
-.btn {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 10px;
-}
+      nav ul li a:hover {
+        background-color: var(--primary-color);
+        color: var(--white);
+      }
 
-.btn:hover {
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-}
+      .dashboard-section {
+        background-color: var(--white);
+        border-radius: 8px;
+        padding: 30px;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
 
-.btn-edit {
-    background-color: #007bff; /* Couleur pour le bouton "Annuler" */
-}
+      .publication-list {
+        list-style-type: none;
+        padding: 0;
+      }
 
-/* Styles du footer */
-footer {
-    background-color: var(--primary-color);
-    color: var(--white);
-    padding: 20px 0;
-    text-align: center;
-}
+      .publication-item {
+        background-color: var(--gray);
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
 
-      
+      .publication-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      .btn-group {
+        margin-top: 10px;
+      }
+
+      .btn {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 10px;
+      }
+
+      .btn:hover {
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+      }
+
+      .btn-delete {
+        background-color: #dc3545;
+      }
+
+      .btn-edit {
+        background-color: #007bff;
+      }
+
+      #addPublicationBtn {
+        display: block;
+        margin: 20px auto;
+        font-size: 18px;
+        padding: 15px 30px;
+      }
+
+      #publicationModal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: var(--white);
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 800px;
+        height: 80vh;
+        overflow-y: auto;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+
+      .form-group input[type="text"],
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      .form-group textarea {
+        height: 150px;
+        resize: vertical;
+      }
+
+      #editor {
+        height: 300px;
+      }
+
+      .image-preview {
+        max-width: 200px;
+        max-height: 200px;
+        margin-top: 10px;
+      }
+
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .tag {
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+      }
+
+      .tag .remove-tag {
+        margin-left: 5px;
+        cursor: pointer;
+      }
+
+      #tagInput {
+        width: calc(100% - 100px);
+      }
+
+      #addTagBtn {
+        width: 90px;
+        margin-left: 10px;
+      }
     </style>
 </head>
 
