@@ -759,21 +759,30 @@ echo "<p>Aucune actualité disponible pour le moment.</p>";
           &copy; 2024 Académie Catholique de Côte d'Ivoire (ACACI). Tous droits
           réservés.
         </p>
-        <div class="social-icons">
+        <div class="social-icons" style="margin-top: 1rem">
           <a
             href="https://www.facebook.com/ACACI"
             aria-label="Facebook de l'ACACI"
-            ><i class="fab fa-facebook fa-2x"></i
+            ><i
+              class="fab fa-facebook fa-2x"
+              style="color: var(--secondary-color); margin: 0 10px"
+            ></i
           ></a>
           <a
             href="https://www.twitter.com/ACACI"
             aria-label="Twitter de l'ACACI"
-            ><i class="fab fa-twitter fa-2x"></i
+            ><i
+              class="fab fa-twitter fa-2x"
+              style="color: var(--secondary-color); margin: 0 10px"
+            ></i
           ></a>
           <a
             href="https://www.linkedin.com/company/ACACI"
             aria-label="LinkedIn de l'ACACI"
-            ><i class="fab fa-linkedin fa-2x"></i
+            ><i
+              class="fab fa-linkedin fa-2x"
+              style="color: var(--secondary-color); margin: 0 10px"
+            ></i
           ></a>
         </div>
       </div>

@@ -114,8 +114,7 @@ if ($result === FALSE) {
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.snow.css"
     />
-    <style>
-      :root {
+    <style>:root {
         --primary-color: #8b0000;
         --secondary-color: #ffd700;
         --text-color: #333333;
@@ -352,6 +351,24 @@ if ($result === FALSE) {
         width: 90px;
         margin-left: 10px;
       }
+      footer {
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+      }
+      a {
+        text-decoration: none;
+      }
+
+      a img {
+        border: 0;
+      }
+      .spy {
+        text-decoration: none;
+        color: var(--white);
+      }
     </style>
 </head>
 
@@ -384,6 +401,7 @@ if ($result === FALSE) {
                     echo "<li>";
                     echo "<h3>" . htmlspecialchars($row['titre']) . "</h3>";
                     echo "<p>" . htmlspecialchars($row['categorie']) . "</p>";
+                    echo "<p>" . htmlspecialchars($row['contenu']) . "</p>";
                     echo "<p><img src='" . htmlspecialchars($row['image']) . "' alt='Image de l'actualité' style='max-width: 100%; height: auto;'></p>";
 
                     // Boutons Modifier et Supprimer
@@ -430,7 +448,40 @@ if ($result === FALSE) {
             </form>
         </div>
     </div>
-
+    <footer>
+      <div class="container">
+        <p>
+          &copy; 2024 Académie Catholique de Côte d'Ivoire <span class=""><a class="spy" href="admin_dashboard.php">(ACACI)</a></span>. Tous droits
+          réservés.
+        </p>
+        <div class="social-icons" style="margin-top: 1rem">
+          <a
+            href="https://www.facebook.com/ACACI"
+            aria-label="Facebook de l'ACACI"
+            ><i
+              class="fab fa-facebook fa-2x"
+              style="color: var(--secondary-color); margin: 0 10px"
+            ></i
+          ></a>
+          <a
+            href="https://www.twitter.com/ACACI"
+            aria-label="Twitter de l'ACACI"
+            ><i
+              class="fab fa-twitter fa-2x"
+              style="color: var(--secondary-color); margin: 0 10px"
+            ></i
+          ></a>
+          <a
+            href="https://www.linkedin.com/company/ACACI"
+            aria-label="LinkedIn de l'ACACI"
+            ><i
+              class="fab fa-linkedin fa-2x"
+              style="color: var(--secondary-color); margin: 0 10px"
+            ></i
+          ></a>
+        </div>
+      </div>
+    </footer>
     <script>
     // JavaScript pour gérer l'affichage du modal et la prévisualisation de l'image
     const addPublicationBtn = document.getElementById('addPublicationBtn');

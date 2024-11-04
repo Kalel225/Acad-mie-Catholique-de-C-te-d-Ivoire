@@ -1,11 +1,3 @@
-<?php
-// Inclure la connexion à la base de données
-include('db_connect.php');
-
-// Requête pour récupérer les quatre actualités les plus récentes avec titre, contenu, image et catégorie
-$query = "SELECT id, titre, contenu, image, categorie, date_publication FROM actualites ORDER BY date_publication DESC LIMIT 4";
-$result = $conn->query($query);
-?>
 
 <html>
   <head>
@@ -436,7 +428,10 @@ $result = $conn->query($query);
       a img {
         border: 0;
       }
-
+      .spy {
+        text-decoration: none;
+        color: var(--white);
+      }
       /* Responsive design */
       @media (max-width: 1200px) {
         html {
@@ -657,6 +652,50 @@ $result = $conn->query($query);
           margin: 2cm;
         }
       }
+      #actualites .container {
+    text-align: center;
+}
+
+.actualites-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.actualite {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.actualite img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.actualite .details {
+    margin-top: 10px;
+}
+
+.actualite .categorie {
+    font-weight: bold;
+    color: #8b0000;
+}
+
+.actualite a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.actualite a:hover {
+    text-decoration: underline;
+}
+
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
@@ -906,10 +945,7 @@ $result = $conn->query($query);
         <div class="container">
           <h2>Contactez-nous</h2>
           <div class="contact-form">
-            <form
-              action="https://academie-catholique-ci.edu/contact"
-              method="POST"
-            >
+          <form action="mailto:academiecatholiqueci@hotmail.com" method="POST" enctype="text/plain">
               <label for="name" class="visually-hidden">Votre nom</label>
               <input
                 type="text"
@@ -963,38 +999,60 @@ $result = $conn->query($query);
       </section>
 
 
-<section
-id="actualites">
+      <section id="actualites">
     <div class="container">
-        <h2>Dernières Actualités</h2>
-        <div class="news-grid">
-            <?php while ($row = $result->fetch_assoc()) : ?>
-                <div class="news-item">
-                    <div class="news-image">
-                        <img src="uploads/<?php echo htmlspecialchars($row['image']); ?>" alt="Image de <?php echo htmlspecialchars($row['titre']); ?>">
+        <h2>Actualités</h2>
+        <div class="actualites-grid">
+            <?php
+            // Connexion à la base de données
+            $conn = new mysqli("localhost", "root", "", "mon_project");
+
+            // Vérifier la connexion
+            if ($conn->connect_error) {
+                die("Échec de la connexion : " . $conn->connect_error);
+            }
+
+            // Requête pour récupérer les 4 dernières actualités
+            $sql = "SELECT id, image, categorie, LEFT(contenu, 60) AS extrait_contenu FROM actualites ORDER BY id DESC LIMIT 4";
+            $result = $conn->query($sql);
+
+            // Afficher chaque actualité
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    ?>
+                    <div class="actualite">
+                    <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Image Actualité">
+                        <div class="details">
+                            <span class="categorie"><?php echo htmlspecialchars($row['categorie']); ?></span>
+                            <p><?php echo htmlspecialchars($row['extrait_contenu']); ?>...</p>
+                            <a href="actualite.php?id=<?php echo htmlspecialchars($row['id']); ?>">Voir plus</a>
+                        </div>
                     </div>
-                    <div class="news-content">
-                        <h3><?php echo htmlspecialchars($row['titre']); ?></h3>
-                        <p class="category"><?php echo htmlspecialchars($row['categorie']); ?></p>
-                        <p><?php echo substr(htmlspecialchars($row['contenu']), 0, 100); ?>...</p>
-                        <a href="actualite.php?id=<?php echo $row['id']; ?>" class="see-more-link">Voir plus</a>
-                    </div>
-                </div>
-            <?php endwhile; ?>
+                    <?php
+                }
+            } else {
+                echo "<p>Aucune actualité disponible pour le moment.</p>";
+            }
+
+            // Fermer la connexion
+            $conn->close();
+            ?>
         </div>
     </div>
 </section>
 
+
 <?php
-// Fermer la connexion
-$conn->close();
+// Libérer le résultat et fermer la connexion
+$result->free();
+
 ?>
     </main>
 
     <footer>
       <div class="container">
         <p>
-          &copy; 2024 Académie Catholique de Côte d'Ivoire (ACACI). Tous droits
+          &copy; 2024 Académie Catholique de Côte d'Ivoire <span class=""><a class="spy" href="login.php">(ACACI)</a></span>. Tous droits
           réservés.
         </p>
         <div class="social-icons" style="margin-top: 1rem">
@@ -1389,9 +1447,5 @@ $conn->close();
       newsletterFormStyleElement.textContent = newsletterFormStyles;
       document.head.appendChild(newsletterFormStyleElement);
     </script>
-    <?php
-// Fermer la connexion
-$conn->close();
-?>
   </body>
 </html>
